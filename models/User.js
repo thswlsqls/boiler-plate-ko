@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const userSchema = mongoose.Schema({
     name: {
-        type: Strung,
+        type: String,
         maxlength: 50
     },
     email: {
@@ -11,8 +11,8 @@ const userSchema = mongoose.Schema({
         unique: 1
     },
     password: {
-        type: Strung,
-        maxlength: 5
+        type: String,
+        minlength: 5
     },
     lastname: {
         type: String,
@@ -22,7 +22,7 @@ const userSchema = mongoose.Schema({
         type: Number,
         default: 0
     },
-    image: Strung,
+    image: String,
     token: {
         type: String
     },

@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser')
 const config = require('./config/key');
 const { auth } = require('./middleware/auth') //미들웨어 역할을 하는 모듈을 직접 만들어 임포트한다.
-const { User } = require("./models/User");
+const { User } = require('./models/User');
 
 //application/X-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: true}));
@@ -18,7 +18,8 @@ mongoose.connect(config.mongoURI,
     useNewUrlParser: true, 
     useUnifiedTopology: true, 
     useCreateIndex: true, 
-    useFindAndModify: false
+    useFindAndModify: false,
+    dbName: "testDB"
 }).then(() => console.log('MongoDB connected...'))
   .catch(err => console.log(err))
 
@@ -30,12 +31,14 @@ app.get('/api/hello', (req, res) => {
   res.send("안녕하세요 ~")
 })
 
-app.post('api/users/register', (req, res) => {
+app.post('/api/users/register', (req, res) => {
     
     //회원가입할 때 필요한 정보들을 client에서 가져오면 
     //그것들을 데이터 베이스에 넣어준다.
 
     const user = new User(req.body);
+    console.log(req.body);
+    
     user.save((err, userInfo) => { //mongoose의 메서드이다.
         if(err) return res.json({ success: false, err })
         return res.status(200).json({
@@ -46,7 +49,7 @@ app.post('api/users/register', (req, res) => {
 
 app.post('/api/users/login', (req, res) => {
 
-  //console.log('ping')
+  console.log(req.body)
   //요청된 이메일을 데이터베이스에서 있는지 찾는다.
   User.findOne({ email: req.body.email }, (err, user) => {
     //console.log('user', user)
@@ -104,7 +107,7 @@ app.get('/api/users/logout', auth, (req, res) => {
     })
 })
 
-const port = 5000;
+const port = 5050;
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
